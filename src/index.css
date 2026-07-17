@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: hsl(var(--primary));
+}
+
+:root {
+  --primary: 347 86% 50%;
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+}
