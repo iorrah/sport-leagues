@@ -4,7 +4,6 @@ export { ErrorBoundary } from "./ErrorBoundary";
 export { Footer } from "./Footer";
 export { Hero } from "./Hero";
 export { LeagueCard } from "./LeagueCard";
-export { LeagueGrid } from "./LeagueGrid";
 export { RateLimitBanner } from "./RateLimitBanner";
 export { SearchBar } from "./SearchBar";
 export { SkeletonGrid } from "./SkeletonGrid";

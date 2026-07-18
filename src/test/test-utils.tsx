@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, RenderOptions } from "@testing-library/react";
-import { renderHook, RenderHookOptions, RenderHookResult } from "@testing-library/react";
+import { render, renderHook } from "@testing-library/react";
+import type { RenderOptions, RenderHookOptions, RenderHookResult } from "@testing-library/react";
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -27,7 +27,7 @@ export const renderWithQueryClient = (ui: ReactNode, options?: Omit<RenderOption
 
 export const renderHookWithQueryClient = <TProps, TResult>(
   callback: (props: TProps) => TResult,
-  options?: RenderHookOptions<TProps, TResult>,
+  options?: Omit<RenderHookOptions<TProps>, "wrapper">,
 ) => {
   const queryClient = createTestQueryClient();
 
