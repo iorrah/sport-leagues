@@ -159,7 +159,7 @@ const LeagueCardComponent = ({ league, searchTerm, isRevealed, onReveal, onHide 
               <div className="flex flex-col items-center pt-8 text-center">
                 <ShieldOff className="mb-3 h-16 w-16 text-muted-foreground/30" strokeWidth={1} />
 
-                <p className="text-sm text-muted-foreground">No badge available</p>
+                <p className="text-sm font-medium">No badge available</p>
               </div>
             )}
 
