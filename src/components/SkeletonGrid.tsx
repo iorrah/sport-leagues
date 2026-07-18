@@ -1,14 +1,30 @@
 export const SkeletonGrid = () => {
   const items = Array.from({ length: 12 }, (_, i) => i);
+
   return (
     <div className="w-full">
-      <div className="animate-pulse bg-neutral-200 max-w-86 h-9 mb-8 rounded-xl" />
+      {/* League Header Skeleton */}
+      <div className="mb-8 animate-pulse">
+        {/* Title */}
+        <div className="h-9 w-80 rounded-xl bg-neutral-200" />
 
-      <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Subtitle */}
+        <div className="mt-3 h-5 w-64 rounded-md bg-neutral-200" />
+
+        {/* Progress bar */}
+        <div className="mt-4 flex items-center gap-3">
+          <div className="h-5 flex-1 overflow-hidden rounded-md bg-neutral-200" />
+
+          {/* Percentage */}
+          <div className="h-5 w-10 rounded-md bg-neutral-200" />
+        </div>
+      </div>
+
+      {/* League Cards Skeleton */}
+      <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:gap-16 lg:grid-cols-3">
         {items.map((i) => (
           <div
             key={i}
-            // Added animate-pulse here
             className="animate-pulse relative flex h-[480px] flex-col overflow-hidden rounded-xl bg-white shadow-md"
           >
             {/* Top spacing */}
@@ -20,8 +36,9 @@ export const SkeletonGrid = () => {
             </div>
 
             {/* League info */}
-            <div className="px-12 text-center">
+            <div className="px-8 text-center">
               <div className="mx-auto mb-3 h-6 w-44 rounded bg-neutral-200" />
+
               <div className="flex justify-center gap-2">
                 <div className="h-6 w-16 rounded-full bg-neutral-200" />
                 <div className="h-6 w-20 rounded-full bg-neutral-200" />

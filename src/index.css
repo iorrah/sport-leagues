@@ -11,3 +11,13 @@
 body {
   font-family: "Noto Sans", sans-serif;
 }
+
+@keyframes progress-stripes {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 16px 0;
+  }
+}

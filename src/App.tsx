@@ -86,6 +86,7 @@ const App = () => {
             isRateLimited={isRateLimited}
             refetch={refetch}
             searchTerm={debouncedSearch}
+            selectedSport={selectedSport}
             onReveal={handleReveal}
           />
         </Suspense>
