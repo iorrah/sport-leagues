@@ -11,6 +11,8 @@ interface Props {
   onHide: (leagueId: string) => void;
 }
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const faceStyle = {
   backfaceVisibility: "hidden" as const,
   WebkitBackfaceVisibility: "hidden" as const,
@@ -26,7 +28,7 @@ const HighlightedText = memo(({ text, highlight }: { text: string; highlight: st
     return <span>{text}</span>;
   }
 
-  const regex = new RegExp(`(${highlight})`, "gi");
+  const regex = new RegExp(`(${escapeRegExp(highlight)})`, "gi");
   const parts = text.split(regex);
 
   return (
@@ -147,7 +149,9 @@ const LeagueCardComponent = ({ league, searchTerm, isRevealed, onReveal, onHide 
                 <p className="mb-4 text-sm text-muted-foreground">Couldn't load badge</p>
 
                 <button
-                  onClick={() => refetch()}
+                  onClick={() => {
+                    void refetch();
+                  }}
                   className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-95"
                 >
                   Retry

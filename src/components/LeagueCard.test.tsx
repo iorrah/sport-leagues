@@ -49,6 +49,26 @@ describe("LeagueCard", () => {
     await waitFor(() => expect(onReveal).toHaveBeenCalledWith("1", "Premier League"));
   });
 
+  it("highlights literal regex characters safely", () => {
+    const specialLeague = {
+      idLeague: "4",
+      strLeague: "C++ League",
+      strSport: "Soccer",
+    };
+
+    renderWithQueryClient(
+      <LeagueCard
+        league={specialLeague}
+        searchTerm="C++"
+        isRevealed={false}
+        onReveal={vi.fn()}
+        onHide={vi.fn()}
+      />,
+    );
+
+    expect(screen.getAllByText("C++", { selector: "mark" })).toHaveLength(2);
+  });
+
   it("shows badge loading state when revealed and query is pending", async () => {
     server.use(
       http.get(path, async ({ request }) => {

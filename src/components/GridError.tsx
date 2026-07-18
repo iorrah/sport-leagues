@@ -20,7 +20,9 @@ export const GridError = ({ refetch }: Props) => {
           </p>
 
           <button
-            onClick={() => refetch()}
+            onClick={() => {
+              void refetch();
+            }}
             className="mt-10 flex min-w-64 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-medium text-white transition-all hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             Retry

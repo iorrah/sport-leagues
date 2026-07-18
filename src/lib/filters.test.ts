@@ -1,4 +1,4 @@
-import { filterLeagues, sortLeagues } from "./filters";
+import { filterLeagues, normalizeSearch, sortLeagues } from "./filters";
 
 const leagues = [
   {
@@ -40,28 +40,34 @@ describe("filterLeagues", () => {
     expect(filterLeagues(leagues, "xyz", "all")).toEqual([]);
   });
 
-  it("normalizes search before filtering so extra whitespace matches", () => {
-    expect(filterLeagues(leagues, "Premier     League", "all")).toEqual([leagues[0]]);
+  it("filters by normalized search term input", () => {
+    expect(filterLeagues(leagues, normalizeSearch("Premier     League"), "all")).toEqual([
+      leagues[0],
+    ]);
+    expect(filterLeagues(leagues, normalizeSearch("     Premier"), "all")).toEqual([leagues[0]]);
+    expect(filterLeagues(leagues, normalizeSearch("Premier\u0000League"), "all")).toEqual([
+      leagues[0],
+    ]);
   });
 
-  it("ignores leading whitespace in search input", () => {
-    expect(filterLeagues(leagues, "     Premier", "all")).toEqual([leagues[0]]);
-  });
-
-  it("ignores control characters in search input", () => {
-    expect(filterLeagues(leagues, "Premier\u0000League", "all")).toEqual([leagues[0]]);
-  });
-
-  it("normalizes Unicode equivalent search terms", () => {
+  it("supports normalized Unicode equivalent search terms", () => {
     const unicodeLeagues = [{ idLeague: "4", strLeague: "Café", strSport: "Soccer" }];
 
-    expect(filterLeagues(unicodeLeagues, "Cafe\u0301", "all")).toEqual(unicodeLeagues);
+    expect(filterLeagues(unicodeLeagues, normalizeSearch("Cafe\u0301"), "all")).toEqual(
+      unicodeLeagues,
+    );
   });
 
   it("remains case-insensitive after normalization", () => {
-    expect(filterLeagues(leagues, "PREMIER", "all")).toEqual([leagues[0]]);
-    expect(filterLeagues(leagues, "premier", "all")).toEqual([leagues[0]]);
-    expect(filterLeagues(leagues, "PrEmIeR", "all")).toEqual([leagues[0]]);
+    expect(filterLeagues(leagues, normalizeSearch("PREMIER"), "all")).toEqual([leagues[0]]);
+    expect(filterLeagues(leagues, normalizeSearch("premier"), "all")).toEqual([leagues[0]]);
+    expect(filterLeagues(leagues, normalizeSearch("PrEmIeR"), "all")).toEqual([leagues[0]]);
+  });
+
+  it("normalizes search input consistently", () => {
+    expect(normalizeSearch("Cafe\u0301")).toBe("Café");
+    expect(normalizeSearch(" foo   bar \t baz ")).toBe("foo bar baz");
+    expect(normalizeSearch("foo\u0000bar")).toBe("foobar");
   });
 
   it("treats HTML-like strings as plain text", () => {

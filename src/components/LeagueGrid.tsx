@@ -17,7 +17,7 @@ interface Props {
   isLoading: boolean;
   isError: boolean;
   isRateLimited: boolean;
-  refetch: () => void;
+  refetch: () => Promise<unknown>;
   searchTerm: string;
   selectedSport: string;
   onReveal: (leagueName: string) => void;
@@ -72,7 +72,13 @@ export const LeagueGrid = ({
     <GridSection>
       {isRateLimited && <RateLimitBanner />}
 
-      {isError && !isRateLimited && <GridError refetch={refetch} />}
+      {isError && !isRateLimited && (
+        <GridError
+          refetch={() => {
+            void refetch();
+          }}
+        />
+      )}
 
       {!isError && (
         <ErrorBoundary>

@@ -11,7 +11,7 @@ import {
 import type { SortField, SortDirection } from "@/types";
 import { useLeagues, useDebouncedValue } from "@/hooks";
 import { RateLimitError } from "@/lib/errors";
-import { filterLeagues, sortLeagues } from "@/lib/filters";
+import { filterLeagues, normalizeSearch, sortLeagues } from "@/lib/filters";
 
 const LeagueGrid = lazy(() =>
   import("@/components/LeagueGrid").then((module) => ({
@@ -27,6 +27,10 @@ const App = () => {
   const [revealMessage, setRevealMessage] = useState("");
 
   const debouncedSearch = useDebouncedValue(searchTerm, 250);
+  const debouncedNormalizedSearch = useMemo(
+    () => normalizeSearch(debouncedSearch),
+    [debouncedSearch],
+  );
   const { data: leagues, isLoading, isError, error, refetch } = useLeagues();
 
   const isRateLimited = error instanceof RateLimitError;
@@ -38,9 +42,9 @@ const App = () => {
 
   const filteredSorted = useMemo(() => {
     if (!leagues) return [];
-    const filtered = filterLeagues(leagues, debouncedSearch, selectedSport);
+    const filtered = filterLeagues(leagues, debouncedNormalizedSearch, selectedSport);
     return sortLeagues(filtered, sortField, sortDirection);
-  }, [leagues, debouncedSearch, selectedSport, sortField, sortDirection]);
+  }, [leagues, debouncedNormalizedSearch, selectedSport, sortField, sortDirection]);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +89,7 @@ const App = () => {
             isError={isError}
             isRateLimited={isRateLimited}
             refetch={refetch}
-            searchTerm={debouncedSearch}
+            searchTerm={debouncedNormalizedSearch}
             selectedSport={selectedSport}
             onReveal={handleReveal}
           />

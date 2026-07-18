@@ -18,7 +18,7 @@ export const apiFetch = async <T>(path: string): Promise<T> => {
       throw new ApiError(response.status, `HTTP Error: ${response.status}`);
     }
 
-    return await response.json();
+    return (await response.json()) as T;
   } finally {
     clearTimeout(timeoutId);
   }

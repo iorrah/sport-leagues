@@ -6,7 +6,7 @@ export const normalizeSearch = (value: string): string =>
     .normalize("NFKC")
     .replace(/\p{Cc}/gu, "")
     .replace(/\s+/g, " ")
-    .trimStart()
+    .trim()
     .slice(0, MAX_SEARCH_LENGTH);
 
 export const filterLeagues = (
@@ -20,9 +20,9 @@ export const filterLeagues = (
       return false;
     }
 
-    // Search filter
+    // Search filter. Caller should normalize the search term before passing it in.
     if (searchTerm) {
-      const term = normalizeSearch(searchTerm).toLocaleLowerCase().replace(/\s+/g, "");
+      const term = searchTerm.toLocaleLowerCase().replace(/\s+/g, "");
       const leagueName = normalizeSearch(league.strLeague).toLocaleLowerCase().replace(/\s+/g, "");
 
       const matchName = leagueName.includes(term);

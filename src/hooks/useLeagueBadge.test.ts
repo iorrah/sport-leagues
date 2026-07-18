@@ -17,7 +17,7 @@ const seasonsResponse = {
 const path = `${API_URL}/${API_KEY}/search_all_seasons.php`;
 
 describe("useLeagueBadge", () => {
-  it("does not fetch when not revealed", async () => {
+  it("does not fetch when not revealed", () => {
     const { result } = renderHookWithQueryClient(() => useLeagueBadge("1", false));
 
     expect(result.current.status).toBe("pending");

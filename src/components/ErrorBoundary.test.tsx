@@ -4,14 +4,12 @@ import { renderWithQueryClient } from "../test/test-utils";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useState } from "react";
 
-let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
 beforeEach(() => {
-  consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
 afterEach(() => {
-  consoleErrorSpy.mockRestore();
+  vi.restoreAllMocks();
 });
 
 const Bomb = ({ shouldThrow }: { shouldThrow: boolean }) => {
