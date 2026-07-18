@@ -13,3 +13,4 @@ export { SportFilter } from "./SportFilter";
 export { GridContent } from "./GridContent";
 export { GridSection } from "./GridSection";
 export { LeagueHeader } from "./LeagueHeader";
+export { GridError } from "./GridError";
