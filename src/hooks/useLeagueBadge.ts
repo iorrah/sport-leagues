@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchSeasonBadge } from "@/lib/api";
 
-export const useLeagueBadge = (leagueId: string, enabled: boolean) =>
-  useQuery<string | null, Error>({
+export const useLeagueBadge = (leagueId: string, isRevealed: boolean) =>
+  useQuery({
     queryKey: ["badge", leagueId],
     queryFn: () => fetchSeasonBadge(leagueId),
-    enabled,
+    enabled: isRevealed,
     staleTime: Infinity,
     gcTime: Infinity,
   });

@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import type { League } from "@/types";
 import {
@@ -29,6 +30,37 @@ export const LeagueGrid = ({
   searchTerm,
   onReveal,
 }: Props) => {
+  const [revealedLeagues, setRevealedLeagues] = useState<Set<string>>(() => new Set());
+
+  const handleReveal = useCallback(
+    (leagueId: string, leagueName: string) => {
+      setRevealedLeagues((previous) => {
+        if (previous.has(leagueId)) {
+          return previous;
+        }
+
+        const next = new Set(previous);
+        next.add(leagueId);
+        return next;
+      });
+
+      onReveal(leagueName);
+    },
+    [onReveal],
+  );
+
+  const handleHide = useCallback((leagueId: string) => {
+    setRevealedLeagues((previous) => {
+      if (!previous.has(leagueId)) {
+        return previous;
+      }
+
+      const next = new Set(previous);
+      next.delete(leagueId);
+      return next;
+    });
+  }, []);
+
   return (
     <GridSection>
       {isRateLimited && <RateLimitBanner />}
@@ -52,7 +84,7 @@ export const LeagueGrid = ({
 
               <button
                 onClick={() => refetch()}
-                className="mt-10 flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-medium text-white transition-all hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer min-w-64"
+                className="mt-10 flex min-w-64 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-medium text-white transition-all hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 Retry
               </button>
@@ -64,21 +96,38 @@ export const LeagueGrid = ({
       {!isError && (
         <ErrorBoundary>
           <GridContent>
-            {isLoading && <SkeletonGrid />}
+            {isLoading ? (
+              <SkeletonGrid />
+            ) : (
+              <>
+                {leagues && leagues.length === 0 ? (
+                  <EmptyState />
+                ) : (
+                  <>
+                    {leagues && leagues.length > 0 && (
+                      <div className="w-full">
+                        <h3 className="mb-8 text-xl md:text-3xl">
+                          {leagues.length} sport league
+                          {leagues.length > 1 ? "s" : ""} available
+                        </h3>
 
-            {!isLoading && leagues && leagues.length === 0 && <EmptyState />}
-
-            {!isLoading && leagues && leagues.length > 0 && (
-              <div className="grid w-full grid-cols-1 gap-8 md:gap-16 sm:grid-cols-2 lg:grid-cols-3">
-                {leagues.map((league) => (
-                  <LeagueCard
-                    key={league.idLeague}
-                    league={league}
-                    searchTerm={searchTerm}
-                    onReveal={onReveal}
-                  />
-                ))}
-              </div>
+                        <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:gap-16 lg:grid-cols-3">
+                          {leagues.map((league) => (
+                            <LeagueCard
+                              key={league.idLeague}
+                              league={league}
+                              searchTerm={searchTerm}
+                              isRevealed={revealedLeagues.has(league.idLeague)}
+                              onReveal={handleReveal}
+                              onHide={handleHide}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
             )}
           </GridContent>
         </ErrorBoundary>

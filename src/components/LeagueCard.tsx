@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import { Shield, ShieldOff, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import type { League } from "@/types";
 import { useLeagueBadge } from "@/hooks/useLeagueBadge";
@@ -6,7 +6,9 @@ import { useLeagueBadge } from "@/hooks/useLeagueBadge";
 interface Props {
   league: League;
   searchTerm: string;
-  onReveal: (leagueName: string) => void;
+  isRevealed: boolean;
+  onReveal: (leagueId: string, leagueName: string) => void;
+  onHide: (leagueId: string) => void;
 }
 
 const faceStyle = {
@@ -64,30 +66,27 @@ const LeagueInfo = memo(({ league, searchTerm }: { league: League; searchTerm: s
 
 LeagueInfo.displayName = "LeagueInfo";
 
-const LeagueCardComponent = ({ league, searchTerm, onReveal }: Props) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
+const LeagueCardComponent = ({ league, searchTerm, isRevealed, onReveal, onHide }: Props) => {
   const {
     data: badgeUrl,
     isLoading,
     isError,
     refetch,
-  } = useLeagueBadge(league.idLeague, isFlipped);
+  } = useLeagueBadge(league.idLeague, isRevealed);
 
   const handleReveal = () => {
-    setIsFlipped(true);
-    onReveal(league.strLeague);
+    onReveal(league.idLeague, league.strLeague);
   };
 
   const handleHide = () => {
-    setIsFlipped(false);
+    onHide(league.idLeague);
   };
 
   const cardStyle = {
     transformStyle: "preserve-3d" as const,
     WebkitTransformStyle: "preserve-3d" as const,
     transition: "transform 600ms cubic-bezier(0.4, 0, 0.2, 1)",
-    transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+    transform: isRevealed ? "rotateY(180deg)" : "rotateY(0deg)",
   };
 
   return (
@@ -170,11 +169,12 @@ const LeagueCardComponent = ({ league, searchTerm, onReveal }: Props) => {
                   src={badgeUrl}
                   alt={`${league.strLeague} badge`}
                   loading="lazy"
-                  className="max-h-full max-w-full animate-in zoom-in-95 object-contain drop-shadow-md fade-in duration-500"
+                  className="animate-in fade-in zoom-in-95 max-h-full max-w-full object-contain drop-shadow-md duration-500"
                 />
               </div>
             )}
           </div>
+
           <LeagueInfo league={league} searchTerm={searchTerm} />
 
           <div className="p-12">
