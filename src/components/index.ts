@@ -10,3 +10,5 @@ export { SearchBar } from "./SearchBar";
 export { SkeletonGrid } from "./SkeletonGrid";
 export { SortControl } from "./SortControl";
 export { SportFilter } from "./SportFilter";
+export { GridContent } from "./GridContent";
+export { GridSection } from "./GridSection";

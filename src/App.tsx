@@ -1,9 +1,23 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { Hero, SearchBar, Footer, ControlsBar, LeagueGrid } from "@/components";
+import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
+import {
+  Hero,
+  SearchBar,
+  Footer,
+  ControlsBar,
+  SkeletonGrid,
+  GridSection,
+  GridContent,
+} from "@/components";
 import type { SortField, SortDirection } from "@/types";
 import { useLeagues, useDebouncedValue } from "@/hooks";
 import { RateLimitError } from "@/lib/errors";
 import { filterLeagues, sortLeagues } from "@/lib/filters";
+
+const LeagueGrid = lazy(() =>
+  import("@/components/LeagueGrid").then((module) => ({
+    default: module.LeagueGrid,
+  })),
+);
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,15 +70,25 @@ const App = () => {
           disabled={!leagues}
         />
 
-        <LeagueGrid
-          leagues={filteredSorted}
-          isLoading={isLoading}
-          isError={isError}
-          isRateLimited={isRateLimited}
-          refetch={refetch}
-          searchTerm={debouncedSearch}
-          onReveal={handleReveal}
-        />
+        <Suspense
+          fallback={
+            <GridSection>
+              <GridContent>
+                <SkeletonGrid />
+              </GridContent>
+            </GridSection>
+          }
+        >
+          <LeagueGrid
+            leagues={filteredSorted}
+            isLoading={isLoading}
+            isError={isError}
+            isRateLimited={isRateLimited}
+            refetch={refetch}
+            searchTerm={debouncedSearch}
+            onReveal={handleReveal}
+          />
+        </Suspense>
       </main>
 
       <Footer />

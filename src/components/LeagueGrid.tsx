@@ -1,6 +1,14 @@
-import type { League } from "@/types";
-import { LeagueCard, ErrorBoundary, SkeletonGrid, EmptyState, RateLimitBanner } from "@/components";
 import { AlertCircle } from "lucide-react";
+import type { League } from "@/types";
+import {
+  LeagueCard,
+  ErrorBoundary,
+  SkeletonGrid,
+  EmptyState,
+  RateLimitBanner,
+  GridSection,
+  GridContent,
+} from "@/components";
 
 interface Props {
   leagues: League[] | undefined;
@@ -22,7 +30,7 @@ export const LeagueGrid = ({
   onReveal,
 }: Props) => {
   return (
-    <section className="flex w-full flex-1 flex-col bg-neutral-50 py-4 md:py-12">
+    <GridSection>
       {isRateLimited && <RateLimitBanner />}
 
       {isError && !isRateLimited && (
@@ -55,7 +63,7 @@ export const LeagueGrid = ({
 
       {!isError && (
         <ErrorBoundary>
-          <div className="mx-auto flex w-full max-w-6xl flex-1 px-4 py-4 sm:px-6 sm:py-6 lg:px-0 lg:py-8">
+          <GridContent>
             {isLoading && <SkeletonGrid />}
 
             {!isLoading && leagues && leagues.length === 0 && <EmptyState />}
@@ -72,9 +80,9 @@ export const LeagueGrid = ({
                 ))}
               </div>
             )}
-          </div>
+          </GridContent>
         </ErrorBoundary>
       )}
-    </section>
+    </GridSection>
   );
 };

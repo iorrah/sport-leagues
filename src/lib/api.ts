@@ -1,9 +1,9 @@
 import type { League, Leagues, Seasons } from "@/types";
 import { ApiError, RateLimitError } from "@/lib/errors";
-import { API_KEY, BASE_URL } from "@/constants/api";
+import { API_KEY, API_URL } from "@/constants/api";
 
 export const apiFetch = async <T>(path: string): Promise<T> => {
-  const url = `${BASE_URL}/${API_KEY}${path}`;
+  const url = `${API_URL}/${API_KEY}${path}`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
