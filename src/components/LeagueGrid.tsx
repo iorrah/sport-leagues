@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { AlertCircle } from "lucide-react";
 import type { League } from "@/types";
 import {
@@ -33,6 +33,11 @@ export const LeagueGrid = ({
   onReveal,
 }: Props) => {
   const [revealedLeagues, setRevealedLeagues] = useState<Set<string>>(() => new Set());
+
+  const revealedCountInView = useMemo(
+    () => leagues?.filter((league) => revealedLeagues.has(league.idLeague)).length ?? 0,
+    [leagues, revealedLeagues],
+  );
 
   const handleReveal = useCallback(
     (leagueId: string, leagueName: string) => {
@@ -110,7 +115,7 @@ export const LeagueGrid = ({
                       <div className="w-full">
                         <LeagueHeader
                           leagues={leagues}
-                          revealedCount={revealedLeagues.size}
+                          revealedCount={revealedCountInView}
                           searchTerm={searchTerm}
                           selectedSport={selectedSport}
                         />

@@ -35,9 +35,9 @@ export const LeagueHeader = ({ leagues, revealedCount, searchTerm, selectedSport
 
   const collectionText =
     revealedCount === 0
-      ? "You haven't revealed any league badges yet"
+      ? "You haven't revealed any league badges for these leagues yet"
       : isComplete
-        ? "You've revealed all the league badges!"
+        ? "You've revealed all the badges for these leagues!"
         : `${revealedCount} ${badgeLabel} revealed · ${remainingCount} to reveal`;
 
   return (
