@@ -1,4 +1,13 @@
+import { MAX_SEARCH_LENGTH } from "@/constants/filters";
 import type { League, SortField, SortDirection } from "@/types";
+
+export const normalizeSearch = (value: string): string =>
+  value
+    .normalize("NFKC")
+    .replace(/\p{Cc}/gu, "")
+    .replace(/\s+/g, " ")
+    .trimStart()
+    .slice(0, MAX_SEARCH_LENGTH);
 
 export const filterLeagues = (
   leagues: League[],
@@ -13,11 +22,12 @@ export const filterLeagues = (
 
     // Search filter
     if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      const matchName = league.strLeague.toLowerCase().includes(term);
-      const matchAlt = (league.strLeagueAlternate || "").toLowerCase().includes(term);
+      const term = normalizeSearch(searchTerm).toLocaleLowerCase().replace(/\s+/g, "");
+      const leagueName = normalizeSearch(league.strLeague).toLocaleLowerCase().replace(/\s+/g, "");
 
-      if (!matchName && !matchAlt) {
+      const matchName = leagueName.includes(term);
+
+      if (!matchName) {
         return false;
       }
     }

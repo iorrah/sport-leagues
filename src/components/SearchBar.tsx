@@ -1,3 +1,4 @@
+import { MAX_SEARCH_LENGTH } from "@/constants/filters";
 import { Search } from "lucide-react";
 
 interface Props {
@@ -13,8 +14,11 @@ export const SearchBar = ({ value, onChange }: Props) => (
       <input
         type="search"
         aria-label="Search leagues"
-        placeholder="Search all leagues…"
+        placeholder="Search leagues"
         data-testid="search-input"
+        autoComplete="off"
+        spellCheck={false}
+        maxLength={MAX_SEARCH_LENGTH}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full pl-10 pr-4 py-3 rounded-md bg-background text-foreground focus:outline-none focus:border-transparent"
