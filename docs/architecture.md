@@ -6,13 +6,6 @@ This project is a single-page React application built with Vite and TypeScript. 
 
 The architecture intentionally keeps domain logic separate from UI concerns, with a lean app shell and isolated helpers for search normalization, filtering, and sorting.
 
-## Governing rules
-
-- Single source of truth for search normalization: raw input is kept in the search bar, but normalized search is derived in `App.tsx` and reused by both filtering and highlighting.
-- Data is treated as reference data whenever possible. League metadata is fetched once and not refetched on window focus.
-- Failure states are explicit and scoped: global list failures do not look like per-card failures, and empty-but-valid results are not mistaken for errors.
-- UI responsibilities are limited to rendering state; business logic lives in `src/lib` and custom hooks.
-
 ## Component structure & responsibilities
 
 - `src/App.tsx`
@@ -50,6 +43,13 @@ The architecture intentionally keeps domain logic separate from UI concerns, wit
   - Contains `normalizeSearch()`, `filterLeagues()`, and `sortLeagues()`.
   - Keeps matching rules deterministic and testable.
 
+## Governing rules
+
+- Single source of truth for search normalization: raw input is kept in the search bar, but normalized search is derived in `App.tsx` and reused by both filtering and highlighting.
+- Data is treated as reference data whenever possible. League metadata is fetched once and not refetched on window focus.
+- Failure states are explicit and scoped: global list failures do not look like per-card failures, and empty-but-valid results are not mistaken for errors.
+- UI responsibilities are limited to rendering state; business logic lives in `src/lib` and custom hooks.
+
 ## State flow
 
 The application separates UI state from server state. UI state lives in `App.tsx` and flows down to controls and cards. Server state is managed by TanStack Query and cached independently.
@@ -59,15 +59,15 @@ flowchart TD
   A[User interacts with SearchBar / ControlsBar] --> B[App state]
   B --> C[Debounced raw search]
   C --> D[Normalized search]
-  D --> E[filterLeagues()]
+  D --> E[filterLeagues]
   E --> F[Filtered league list]
   F --> G[LeagueGrid]
   G --> H[LeagueCard]
-  H --> I[useLeagueBadge() if reveal clicked]
+  H --> I[useLeagueBadge if reveal clicked]
 
   subgraph ServerState
-    J[useLeagues query: ['leagues']]
-    K[useLeagueBadge query: ['badge', leagueId]]
+    J[useLeagues query: leagues]
+    K[useLeagueBadge query: badge, leagueId]
   end
 
   B --> J

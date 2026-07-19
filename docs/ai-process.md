@@ -29,7 +29,7 @@ It is written as a practitioner-facing diary and a guide for reviewers who want 
 9. Responsive layout (mobile-first, no horizontal scroll)
 10. `README.md` + docs in `docs/` with setup and architecture
 
-### P1 — Signals of seniority (next)
+### P1 — Going beyond expectations
 
 1. Extract filter/sort logic into pure functions (`filterLeagues`, `sortLeagues`) for unit testing
 2. Debounced search (`useDebouncedValue`, ~250ms)

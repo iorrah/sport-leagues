@@ -23,9 +23,9 @@ cp .env.example .env
 3. Update `.env` with your API values:
 
 ```env
-VITE_API_BASE_URL=https://www.thesportsdb.com/api/v1/json
-VITE_API_PATH=1
-VITE_API_KEY=<YOUR_API_KEY>
+VITE_API_BASE_URL=https://www.thesportsdb.com
+VITE_API_PATH=api/v1/json
+VITE_API_KEY=123
 ```
 
 ## Local development
